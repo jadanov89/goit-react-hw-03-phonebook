@@ -5,24 +5,22 @@ import { Filter } from './Filter/Filter';
 import { List } from './List/List';
 
 export default class App extends Component {
-  state = {
-    contacts: [],
-    filter: '',
-  };
-
-
-  componentDidMount() {
-    const storageContacts = localStorage.getItem('contacts');
-    const parsedStorageContacts = JSON.parse(storageContacts);
-
-    if (parsedStorageContacts) {
-      this.setState({ contacts: parsedStorageContacts });
-    }
+  constructor(props) {
+    super(props);
+    this.state = {
+      contacts: this.initializeContacts(),
+      filter: '',
+    };
   }
 
-  componentDidUpdate(prevState) {
-    const { contacts } = this.state;
+  initializeContacts = () => {
+    const storageContacts = localStorage.getItem('contacts');
+    const parsedStorageContacts = JSON.parse(storageContacts);
+    return parsedStorageContacts ? parsedStorageContacts : [];
+  };
 
+  componentDidUpdate(prevProps, prevState) {
+    const { contacts } = this.state;
     if (contacts !== prevState.contacts) {
       localStorage.setItem('contacts', JSON.stringify(contacts));
     }
